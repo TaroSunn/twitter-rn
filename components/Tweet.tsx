@@ -1,6 +1,21 @@
 import { View, Text, StyleSheet, Image } from "react-native";
 import React from "react";
 import { TweetType } from "../types";
+import { Entypo, EvilIcons } from "@expo/vector-icons";
+
+type IconButtonProps = {
+  icon: React.ComponentProps<typeof EvilIcons>["name"];
+  text?: number | string;
+};
+
+const IconButton = ({ icon, text }: IconButtonProps) => {
+  return (
+    <View style={{ flexDirection: "row", alignItems: "center" }}>
+      <EvilIcons name={icon} size={22} color="gray" />
+      <Text style={{ fontSize: 12, color: "gray" }}>{text}</Text>
+    </View>
+  );
+};
 
 type TweetProps = {
   tweet: TweetType;
@@ -9,10 +24,29 @@ type TweetProps = {
 const Tweet = ({ tweet }: TweetProps) => {
   return (
     <View style={styles.container}>
-      <Image src={tweet.user.image} style={styles.userImage} />
+      <Image source={{ uri: tweet.user.image }} style={styles.userImage} />
       <View style={styles.mainContainer}>
-        <Text style={styles.name}>{tweet.user.name}</Text>
+        <View style={{ flexDirection: "row" }}>
+          <Text style={styles.name}>{tweet.user.name}</Text>
+          <Text style={styles.username}>{tweet.user.username} •2h</Text>
+          <Entypo
+            name="dots-three-horizontal"
+            size={16}
+            color="gray"
+            style={{ marginLeft: "auto" }}
+          />
+        </View>
         <Text style={styles.content}>{tweet.content}</Text>
+        {tweet.image && (
+          <Image source={{ uri: tweet.image }} style={styles.image} />
+        )}
+        <View style={styles.footer}>
+          <IconButton icon="comment" text={tweet.numberOfComments} />
+          <IconButton icon="retweet" text={tweet.numberOfRetweets} />
+          <IconButton icon="heart" text={tweet.numberOfLikes} />
+          <IconButton icon="chart" text={tweet.impressions || 0} />
+          <IconButton icon="share-apple" />
+        </View>
       </View>
     </View>
   );
@@ -20,8 +54,6 @@ const Tweet = ({ tweet }: TweetProps) => {
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: "center",
-    justifyContent: "center",
     flexDirection: "row",
     padding: 10,
     borderBottomWidth: StyleSheet.hairlineWidth,
@@ -43,6 +75,21 @@ const styles = StyleSheet.create({
   content: {
     lineHeight: 20,
     marginTop: 5,
+  },
+  image: {
+    width: "100%",
+    aspectRatio: 16 / 9,
+    marginVertical: 10,
+    borderRadius: 15,
+  },
+  username: {
+    color: "gray",
+    marginLeft: 5,
+  },
+  footer: {
+    flexDirection: "row",
+    marginVertical: 5,
+    justifyContent: "space-between",
   },
 });
 export default Tweet;
