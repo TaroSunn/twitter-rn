@@ -1,9 +1,12 @@
 import { View, Text, StyleSheet, Image } from "react-native";
 import React from "react";
-import tweets from "../assets/data/tweets";
+import { TweetType } from "../types";
 
-const tweet = tweets[0];
-const Tweet = ({ tweet }) => {
+type TweetProps = {
+  tweet: TweetType;
+};
+
+const Tweet = ({ tweet }: TweetProps) => {
   return (
     <View style={styles.container}>
       <Image src={tweet.user.image} style={styles.userImage} />
